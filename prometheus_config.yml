@@ -135,3 +135,9 @@ data:
         - source_labels: [__meta_kubernetes_service_name]
           action: replace
           target_label: kubernetes_name
+        - job_name: 'redis'
+          static_configs:
+            - targets: ['redis:9121']
+        - job_name: prometheus
+          static_configs:
+            - targets: ['prometheus:9090']
