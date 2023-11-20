@@ -1,13 +1,13 @@
 {
-    "name": "web-server",
-    "version": "1.0.0",
-    "description": "Simple web server for emulation",
-    "main": "app.js",
-    "scripts": {
-      "start": "node app.js"
-    },
-    "dependencies": {
-      "express": "^4.17.1"
-    }
+  "name": "nodejs-prometheus-webserver",
+  "version": "1.0.0",
+  "description": "Node.js web server with Prometheus metrics",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "prom-client": "^15.0.0"
   }
-  
+}
