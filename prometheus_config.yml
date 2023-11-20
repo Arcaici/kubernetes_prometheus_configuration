@@ -30,6 +30,9 @@ data:
         - targets:
           - "alertmanager.monitoring.svc:9093"
     scrape_configs:
+      - job_name: 'simulation'
+        static_configs:
+          - targets: ['simulation:3000']
       - job_name: 'node-exporter'
         kubernetes_sd_configs:
           - role: endpoints
@@ -135,9 +138,3 @@ data:
         - source_labels: [__meta_kubernetes_service_name]
           action: replace
           target_label: kubernetes_name
-        - job_name: prometheus
-          static_configs:
-            - targets: ['prometheus:9090']
-        - job_name: simulation
-          static_configs:
-            - targets: ['simulation:9090']
