@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: simulation
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simulation-service
+  namespace: simulation
+spec:
+  selector:
+    app: web-server
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulation
+  namespace: simulation
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simulation
+  template:
+    metadata:
+      labels:
+        app: simulation
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+    spec:
+      containers:
+      - name: simulation-server
+        image: simulation-server
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
