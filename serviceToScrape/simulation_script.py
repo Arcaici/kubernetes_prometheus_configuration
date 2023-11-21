@@ -8,15 +8,15 @@ web_server_url = "http://localhost:8081"
 def instruction():
     # This is the function representing the instruction you want to execute
             # Simulate requests
-    time.sleep(random.uniform(0.5 , 1))
+    time.sleep(random.uniform(0.5 , 10))
     if round(random.random()) == 0:
         response = requests.get(f"{web_server_url}/error")
     else:
-        response = requests.get(f"{web_server_url}/simulation-requests")
+        response = requests.get(f"{web_server_url}/simulate-requests")
     print(response.text)
 
 def main():
-    i = 100000
+    i = 100
     # Using ThreadPoolExecutor to parallelize the execution
     with concurrent.futures.ThreadPoolExecutor() as executor:
         while (i > 0):

@@ -16,37 +16,32 @@ prometheusRegistry.setDefaultLabels({
 const numberOfRequests = new prometheus.Counter({
   name: 'simulation_app_requests_total',
   help: 'Total number of requests to the simulation app',
-  labelNames: ['method'],
+  labelNames: ['method', 'route', 'statusCode'],
   registers: [prometheusRegistry],
 });
 
 // Add a histogram for request durations
 const requestDurationHistogram = new prometheus.Histogram({
-  name: 'simulation_app_request_duration_seconds',
-  help: 'Histogram of request durations for the simulation app',
-  labelNames: ['route'],
+  name: 'simulation_app_request_duration_milliseconds',
+  help: 'Histogram of request durations for the simulation app in milliseconds',
+  labelNames: ['method', 'route', 'code'],
   registers: [prometheusRegistry],
-  buckets: [0.1, 0.5, 1, 2, 5], // Specify histogram buckets in seconds
+  buckets: [1,2,3,4,5,10,25,50,100,250,500,1000],
 });
 
 
 /* application routes and logic */
-
 app.use((req, res, next) => {
-  numberOfRequests.inc({ method: req.method });
-
-  // Start measuring request duration
-  const end = requestDurationHistogram.startTimer();
-
-  // Attach the histogram timer to the request for use in later middleware
-  req.requestDurationTimer = end;
+  res.locals.startEpoch = Date.now();
+  numberOfRequests.labels({method: req.method, route: req.originalUrl, statusCode: res.statusCode}).inc();
 
   next();
 });
 
 app.get('/', (req, res) => {
   res.send('Hello, this is your web server!');
-  req.requestDurationTimer();
+  const responseTimeInMilliseconds = Date.now() - res.locals.startEpoch;
+  requestDurationHistogram.labels(req.method, req.route.path, res.statusCode).observe(responseTimeInMilliseconds)
 });
 
 app.get('/error', (req, res) => {
@@ -57,12 +52,32 @@ app.get('/error', (req, res) => {
 
 app.get('/simulate-requests', (req, res) => {
   // Simulate some requests
-  for (let i = 0; i < 5; i++) {
-    console.log(`Processing request ${i + 1}`);
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
-  numberOfRequests.inc({ method: 'succeed' });
-  res.send('Simulated requests completed!');
-  req.requestDurationTimer();
+  
+  async function randomSleep() {
+    const minDuration = 0.1 * 1000; // Convert seconds to milliseconds
+    const maxDuration = 8 * 1000;  // Convert seconds to milliseconds
+  
+    const randomDuration = Math.random() * (maxDuration - minDuration) + minDuration;
+    
+    console.log(`Sleeping for ${randomDuration / 1000} seconds...`);
+    
+    await sleep(randomDuration);
+    
+    console.log('Awake!');
+
+    randomSleep()
+
+    res.send('Simulated requests completed!');
+    const responseTimeInMilliseconds = Date.now() - res.locals.startEpoch;
+    requestDurationHistogram.labels(req.method, req.route.path, res.statusCode).observe(responseTimeInMilliseconds)
+
+  }
+  // Call the function to demonstrate
+  randomSleep();
 });
 
 /* metrics endpoint */
