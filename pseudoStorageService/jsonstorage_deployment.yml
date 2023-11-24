@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: json-data-server-service
+  namespace: monitoring
+spec:
+  selector:
+    app: json-data-server
+  ports:
+    - protocol: TCP
+      port: 3001
+      targetPort: 3001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: json-data-server
+  namespace: monitoring
+spec:
+  replicas: 1  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: json-data-server
+  template:
+    metadata:
+      labels:
+        app: json-data-server
+    spec:
+      containers:
+        - name: json-data-server
+          image: json-data-server  # Change this to your Docker image
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 3001
+---
+
