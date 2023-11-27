@@ -10,7 +10,7 @@ This project demonstrates the setup and basic functionality of Prometheus for mo
 - [Setup](#setup)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
-- [Next Steps](#next-steps)
+- [Next Steps and Conclusions](#Next Steps and Conclusion)
 
 ## Prerequisites
 
