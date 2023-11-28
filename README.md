@@ -39,7 +39,7 @@ Before getting started, ensure you have the following installed:
     docker build -t simulation-server ./serviceToScrape/
     kubectl apply -f ./serviceToScrape/simulation_deployment.yml
    ```
-5. Apply JSON pseudo storage service
+5. Apply JSON pseudo storage service:
    ```bash
     docker build -t json-data-server ./pseudoStorageService/
     kubectl apply -f ./pseudoStorageService/jsonstorage_deployment.yml
@@ -56,7 +56,7 @@ Before getting started, ensure you have the following installed:
     kubectl port-forward -n simulation deployment.apps/simulation 8081:3000
    ```
    and then run the python script.
-2. If you want to access prometheus console and GUi you need to port-forward to
+2. If you want to access prometheus console and GUI you need to port-forward to:
    ```bash
     kubectl port-forward deployment.apps/prometheus 8080:9090 -n monitoring
    ```
