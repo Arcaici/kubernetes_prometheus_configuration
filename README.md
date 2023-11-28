@@ -60,13 +60,13 @@ Before getting started, ensure you have the following installed:
    ```bash
     kubectl port-forward deployment.apps/prometheus 8080:9090 -n monitoring
    ```
-   and then access from your web browser to http://localhost:9090
+   and then access from your web browser to http://localhost:9090 .
 3. If you want to check the last prometheus metrics saved from pseudo storage service you need to forward:
    ```bash
     kubectl port-forward -n monitoring service/json-data-server-service 3001:3001
    ```
-   and then access from your web browser to http://localhost:3001/lastdata
+   and then access from your web browser to http://localhost:3001/lastdata .
 
 ## Next Steps and Conclusion
-Using a Node.js server to store long-term time series data is not the recommended approach; typically, tools like Thanos or Grafana are employed for such purposes. In this case, I chose not to implement additional services to avoid complicating the situation and exceeding the scope of the guide. Exploring how Thanos, coupled with Prometheus, can enhance the monitoring system could be an interesting avenue for further study
+Using a Node.js server to store long-term time series data is not the recommended approach; typically, tools like Thanos or Grafana are employed for such purposes. In this case, I chose not to implement additional services to avoid complicating the situation and exceeding the scope of the guide. Exploring how Thanos, coupled with Prometheus, can enhance the monitoring system could be an interesting avenue for further study.
 
