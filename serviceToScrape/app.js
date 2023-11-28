@@ -13,6 +13,7 @@ prometheusRegistry.setDefaultLabels({
 })
 
 /* Custom metrics */
+// Add a counter for request durations
 const numberOfRequests = new prometheus.Counter({
   name: 'simulation_app_requests_total',
   help: 'Total number of requests to the simulation app',
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  // Home page endpoint
   res.send('Hello, this is your web server!');
   const responseTimeInMilliseconds = Date.now() - res.locals.startEpoch;
   requestDurationHistogram.labels(req.method, req.route.path, res.statusCode).observe(responseTimeInMilliseconds)
@@ -56,10 +58,10 @@ app.get('/simulate-requests', (req, res) => {
   function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
+  // The simulated request has a random time of execution
   async function randomSleep() {
-    const minDuration = 0.1 * 1000; // Convert seconds to milliseconds
-    const maxDuration = 8 * 1000;  // Convert seconds to milliseconds
+    const minDuration = 0.1 * 1000; 
+    const maxDuration = 8 * 1000;  
   
     const randomDuration = Math.random() * (maxDuration - minDuration) + minDuration;
     
@@ -76,7 +78,6 @@ app.get('/simulate-requests', (req, res) => {
     requestDurationHistogram.labels(req.method, req.route.path, res.statusCode).observe(responseTimeInMilliseconds)
 
   }
-  // Call the function to demonstrate
   randomSleep();
 });
 

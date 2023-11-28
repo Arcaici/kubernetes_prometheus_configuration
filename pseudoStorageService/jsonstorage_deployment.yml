@@ -17,7 +17,7 @@ metadata:
   name: json-data-server
   namespace: monitoring
 spec:
-  replicas: 1  # Adjust the number of replicas as needed
+  replicas: 1  
   selector:
     matchLabels:
       app: json-data-server
@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: json-data-server
-          image: json-data-server  # Change this to your Docker image
+          image: json-data-server  
           imagePullPolicy: Never
           ports:
           - containerPort: 3001

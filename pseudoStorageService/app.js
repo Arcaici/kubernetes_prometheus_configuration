@@ -6,10 +6,10 @@ const cron = require('node-cron');
 const app = express();
 const port = 3001;
 
-// Function to retrieve data from the specified HTTP endpoint and save it as a JSON file
+// HTTP function to retrieve data from prometheus query api
 async function fetchDataAndSave() {
   try {
-    const response = await axios.get('http://prometheus.monitoring.svc.cluster.local:9090/api/v1/query?query={__name__!=""}'); // Replace with your actual endpoint
+    const response = await axios.get('http://prometheus.monitoring.svc.cluster.local:9090/api/v1/query?query={__name__!=""}');
     const jsonData = response.data;
 
     const timestamp = new Date().toISOString();
@@ -27,7 +27,6 @@ cron.schedule('*/30 * * * * *', fetchDataAndSave);
 
 // Endpoint to retrieve the last saved JSON file
 app.get('/lastData', (req, res) => {
-  // Assuming the files are saved in the same directory as the script
   const files = fs.readdirSync(__dirname);
   const jsonFiles = files.filter(file => file.endsWith('.json'));
 
